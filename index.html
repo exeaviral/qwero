@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qwero – Reviving raw human writing.</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Editorial Serif (Newsreader) & Clean Sans (Plus Jakarta Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF6EE',
+            lavender: '#B589E8',
+            lavenderDark: '#9A67D6',
+            ink: '#2A2135',
+            inkMuted: '#645872'
+          },
+          fontFamily: {
+            serif: ['"Newsreader"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --bg-cream: #FAF6EE;
+      --brand-lavender: #B589E8;
+      --ink-primary: #2A2135;
+      --ink-secondary: #645872;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--ink-primary);
+      overflow-x: hidden;
+      selection-background-color: #B589E8;
+    }
+
+    ::selection {
+      background: rgba(181, 137, 232, 0.28);
+      color: #2A2135;
+    }
+
+    /* Subtle warm paper texture overlay */
+    .paper-grain {
+      background-image: radial-gradient(rgba(181, 137, 232, 0.09) 1px, transparent 0);
+      background-size: 28px 28px;
+    }
+
+    /* Ambient cursor glow */
+    .ambient-glow {
+      position: fixed;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(181, 137, 232, 0.14) 0%, rgba(181, 137, 232, 0.04) 45%, transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    /* SVG Qwero Logo Animation */
+    #qwero-path {
+      stroke-dasharray: 2100;
+      stroke-dashoffset: 2100;
+      animation: drawLogo 1.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+    }
+
+    @keyframes drawLogo {
+      0% {
+        stroke-dashoffset: 2100;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .logo-container {
+      cursor: pointer;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s ease;
+    }
+
+    .logo-container:hover {
+      transform: scale(1.035) rotate(-1.5deg);
+      filter: drop-shadow(0 12px 24px rgba(181, 137, 232, 0.22));
+    }
+
+    .logo-container:active {
+      transform: scale(0.98);
+    }
+
+    /* Staggered Editorial Reveal */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal-item.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Subtle hand-drawn underline accent beneath "raw human writing." */
+    .human-underline {
+      position: relative;
+      display: inline-block;
+    }
+
+    .human-underline::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0.06em;
+      width: 100%;
+      height: 0.11em;
+      background-color: rgba(181, 137, 232, 0.45);
+      border-radius: 999px;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) 1.05s;
+    }
+
+    .is-visible .human-underline::after {
+      transform: scaleX(1);
+    }
+
+    /* Instagram Pill Link Styling */
+    .insta-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.7rem 1.35rem;
+      border-radius: 9999px;
+      border: 1.5px solid rgba(181, 137, 232, 0.48);
+      background-color: rgba(250, 246, 238, 0.75);
+      backdrop-filter: blur(6px);
+      color: var(--ink-primary);
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 4px 18px -4px rgba(181, 137, 232, 0.15);
+    }
+
+    .insta-link:hover {
+      border-color: var(--brand-lavender);
+      background-color: rgba(181, 137, 232, 0.13);
+      box-shadow: 0 8px 26px -4px rgba(181, 137, 232, 0.32);
+      transform: translateY(-2px);
+    }
+
+    .insta-link:active {
+      transform: translateY(0);
+    }
+
+    .insta-icon {
+      color: #9A67D6;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.35s ease;
+    }
+
+    .insta-link:hover .insta-icon {
+      transform: scale(1.1) rotate(-4deg);
+      color: #7E48BF;
+    }
+  </style>
+</head>
+<body class="min-h-screen w-full flex flex-col items-center justify-center paper-grain relative px-6 py-12">
+
+  <!-- Interactive Ambient Glow -->
+  <div id="ambient-glow" class="ambient-glow" aria-hidden="true"></div>
+
+  <!-- Centered Main Content Wrapper -->
+  <main class="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center text-center">
+
+    <!-- Qwero Logo SVG (Faithful recreation of the uploaded Qwero mark) -->
+    <div id="logo-trigger" class="logo-container mb-8 sm:mb-10 select-none" role="img" aria-label="Qwero Logo">
+      <svg
+        class="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44"
+        viewBox="0 0 1000 1000"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <!--
+          Continuous monoline "Q" mark in #B589E8:
+          Starts at the lower-right open end of the circular bowl (~4 o'clock),
+          sweeps counter-clockwise around the top and left, curves inward at the bottom
+          to form the inner loop, and flows down-right into a rounded wavy tail.
+        -->
+        <path
+          id="qwero-path"
+          d="M 672 544
+             C 700 475, 692 382, 636 322
+             C 554 234, 396 234, 314 322
+             C 242 400, 246 535, 318 618
+             C 368 676, 456 694, 496 664
+             C 518 648, 494 612, 468 588
+             C 442 564, 452 522, 496 520
+             C 542 518, 574 568, 602 642
+             C 626 706, 666 742, 742 718"
+          stroke="#B589E8"
+          stroke-width="88"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+
+    <!-- 1. Main Heading / Title -->
+    <h1
+      id="item-heading"
+      class="reveal-item font-serif text-3xl sm:text-5xl md:text-[3.35rem] leading-[1.18] tracking-tight text-ink font-normal mb-5 sm:mb-6"
+    >
+      <span class="font-medium">Qwero</span>
+      <span class="text-lavenderDark mx-1 font-light">–</span>
+      <span class="italic human-underline">Reviving raw human writing.</span>
+    </h1>
+
+    <!-- 2. Subtitle / Tagline -->
+    <p
+      id="item-subtitle"
+      class="reveal-item font-sans text-base sm:text-xl md:text-2xl text-inkMuted font-normal tracking-wide mb-10 sm:mb-12"
+    >
+      One prompt. A Thousand Perspectives
+    </p>
+
+    <!-- 3. Instagram Link -->
+    <div id="item-link" class="reveal-item">
+      <a
+        id="magnetic-insta"
+        href="https://www.instagram.com/tryqwero/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="insta-link font-sans text-sm sm:text-base font-medium tracking-tight"
+        aria-label="https://www.instagram.com/tryqwero/"
+      >
+        <!-- Clean Instagram SVG Icon -->
+        <svg
+          class="insta-icon w-5 h-5 shrink-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.85"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+        </svg>
+        <span>@tryqwero</span>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Interactive JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const heading = document.getElementById('item-heading');
+      const subtitle = document.getElementById('item-subtitle');
+      const linkWrap = document.getElementById('item-link');
+      const logoTrigger = document.getElementById('logo-trigger');
+      const qweroPath = document.getElementById('qwero-path');
+      const ambientGlow = document.getElementById('ambient-glow');
+      const magneticInsta = document.getElementById('magnetic-insta');
+
+      // 1. Staggered reveal cadence for text & link
+      setTimeout(() => heading.classList.add('is-visible'), 350);
+      setTimeout(() => subtitle.classList.add('is-visible'), 700);
+      setTimeout(() => linkWrap.classList.add('is-visible'), 1050);
+
+      // 2. Replay SVG logo stroke animation on click/tap
+      logoTrigger.addEventListener('click', () => {
+        qweroPath.style.animation = 'none';
+        // Trigger reflow to restart CSS animation cleanly
+        void qweroPath.offsetWidth;
+        qweroPath.style.animation = 'drawLogo 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards';
+      });
+
+      // 3. Smooth ambient glow following pointer
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let glowX = mouseX;
+      let glowY = mouseY;
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      function animateGlow() {
+        glowX += (mouseX - glowX) * 0.08;
+        glowY += (mouseY - glowY) * 0.08;
+        if (ambientGlow) {
+          ambientGlow.style.left = `${glowX}px`;
+          ambientGlow.style.top = `${glowY}px`;
+        }
+        requestAnimationFrame(animateGlow);
+      }
+      animateGlow();
+
+      // 4. Subtle magnetic hover effect on the Instagram link
+      if (magneticInsta) {
+        magneticInsta.addEventListener('mousemove', (e) => {
+          const rect = magneticInsta.getBoundingClientRect();
+          const offsetX = e.clientX - (rect.left + rect.width / 2);
+          const offsetY = e.clientY - (rect.top + rect.height / 2);
+          magneticInsta.style.transform = `translate(${offsetX * 0.15}px, ${offsetY * 0.22 - 2}px)`;
+        });
+
+        magneticInsta.addEventListener('mouseleave', () => {
+          magneticInsta.style.transform = '';
+        });
+      }
+    });
+  </script>
+</body>
+</html>
